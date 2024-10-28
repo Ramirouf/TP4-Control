@@ -1,0 +1,10 @@
+%% Definir la planta.
+
+%Gp = T_H/V_e;
+K_H = 350/250;
+Gp = K_H / (400s+1);
+% Este modelo térmico se modela con un equivalente elétrico, donde:
+C_p = 1; R_p = 400; K_1 = 1;4; % F; Ohm; °C/V
+% El acondicionador del sensor entrega 3,5 V para 350 °C.
+% Es decir, para 3,5 V, e=0
+% K_s es el sensor con acondicionador
