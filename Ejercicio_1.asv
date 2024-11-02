@@ -79,63 +79,30 @@ G_c_z_t2 = zpk(minreal(0.4 * (s_t+0.005399355) /s_t));
 
 % Discretizar la planta, usando el método de ZOH, por ser usado por los uC.
 Gpz = c2d(G_p, T);
+%Gpz_T_2 = c2d(G_p, T_2);
+% Tustin T = 200
+%G_LAz1 = G_c_z_t1 * K_a * Gpz_T_1 * K_s;
+%G_LCz1 = feedback(G_LAz1, 1);
+
 % Backward T = 40
 G_LAB = G_c_z_bw2 * K_a * Gpz * K_s;
 G_LCB = feedback(G_LAB, 1);
 % Forward T = 40
 G_LAF = G_c_z_fw2 * K_a * Gpz * K_s;
 G_LCF = feedback(G_LAF, 1);
+
 % Tustin T = 40
 G_LAT = G_c_z_t2 * K_a * Gpz * K_s;
 G_LCT = feedback(G_LAT, 1);
 figure;
-stepplot(320*G_LC, 320*G_LCB, 320*G_LCF, 320*G_LCT);
+stepplot(320G_LC, G_LCB, G_LCF, G_LCT);
 legend("G LC s", "G LC Backward", "G LC Forward", "G LC Tustin");
 title('Respuesta al escalón en LC, para TC y TD (T=40)');
-xlabel("Tiempo [s]");
-ylabel("Temperatura [°C]");
-
-% Discretizar la planta, usando el método de ZOH y T = 200.
-Gpz = c2d(G_p, T_1);
-% Backward T = 200
-G_LAB = G_c_z_bw1 * K_a * Gpz * K_s;
-G_LCB = feedback(G_LAB, 1);
-% Forward T = 200
-G_LAF = G_c_z_fw1 * K_a * Gpz * K_s;
-G_LCF = feedback(G_LAF, 1);
-% Tustin T = 200
-G_LAT = G_c_z_t1 * K_a * Gpz * K_s;
-G_LCT = feedback(G_LAT, 1);
-figure;
-stepplot(320*G_LC, 320*G_LCB, 320*G_LCF, 320*G_LCT);
-legend("G LC s", "G LC Backward", "G LC Forward", "G LC Tustin");
-title('Respuesta al escalón en LC, para TC y TD (T=200)');
-xlabel("Tiempo [s]");
-ylabel("Temperatura [°C]");
-
-% Acciones de control T = 40
-u_s = feedback(G_c, K_a * G_p * K_s);
-Gpz = c2d(G_p, T);
-% Backward T = 40
-u_B = feedback(G_c_z_bw2, K_a * Gpz * K_s);
-% Forward T = 40
-u_F = feedback(G_c_z_fw2, K_a * Gpz * K_s);
-% Tustin T = 40
-u_T = feedback(G_c_z_t2, K_a * Gpz * K_s);
-figure;
-stepplot(u_s, u_B, u_F, u_T);
-legend("u TC", "u Backward", "u Forward", "u Tustin");
-title('Acción de control TC y TD (T=40)');
-
-% Acciones de control T = 200
-Gpz = c2d(G_p, T_1);
-% Backward T = 200
-u_B = feedback(G_c_z_bw1, K_a * Gpz * K_s);
-% Forward T = 200
-u_F = feedback(G_c_z_fw1, K_a * Gpz * K_s);
-% Tustin T = 200
-u_T = feedback(G_c_z_t1, K_a * Gpz * K_s);
-figure;
-stepplot(u_s, u_B, u_F, u_T);
-legend("u TC", "u Backward", "u Forward", "u Tustin");
-title('Acción de control TC y TD (T=200)');
+xlabel("Tiempo");
+ylabel("Temperatura");
+% Acciones de control
+%u_t1 = feedback(G_c_z_t1, K_a*Gpz_T_1*K_s);
+%u_t2 = feedback(G_c_z_t2, K_a*Gpz_T_2*K_s);
+%figure;
+%step(u_t1, u_t2);
+%legend("Acción de control Tustin para T=200", "Acción de control Tustin para T=40");
